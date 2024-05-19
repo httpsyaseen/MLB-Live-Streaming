@@ -1,13 +1,13 @@
 {
   "expo": {
     "name": "MLB-Live-Streaming",
-    "slug": "MLB-Live-Streaming",
+    "slug": "mlb-live-streaming",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/base4.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/base4.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -16,12 +16,29 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/base4.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.httpsyaseen.mlblivestreaming",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/tv.png",
+          "color": "#ffffff",
+          "sounds": ["./assets/baseball.mp3"]
+        }
+      ]
+    ],
+    "extra": { "eas": { "projectId": "36075786-4f99-4bfd-bdad-b54066bb64e8" } }
+  },
+
+  "react-native-google-mobile-ads": {
+    "android_app_id": "ca-app-pub-7792480241298867~2193460945"
   }
 }

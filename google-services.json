@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "658959292833",
+    "project_id": "mlb-live-streaming",
+    "storage_bucket": "mlb-live-streaming.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:658959292833:android:55250bc3f5ace81d6653e0",
+        "android_client_info": {
+          "package_name": "com.httpsyaseen.mlblivestreaming"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYhvSfCu8YgkgG2p8OBsj7FY_I9WrMATw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
