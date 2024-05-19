@@ -7,24 +7,8 @@ import {
   BannerAd,
   BannerAdSize,
   InterstitialAd,
-  AdEventType,
+  TestIds,
 } from "react-native-google-mobile-ads";
-
-const interstitial = InterstitialAd.createForAdRequest(
-  "ca-app-pub-7792480241298867/2064402770"
-  // {
-  //   keywords: ["fashion", "clothing"],
-  // }
-);
-
-function BannerAdComponent() {
-  return (
-    <BannerAd
-      unitId={"ca-app-pub-7792480241298867/4787834692"}
-      size={BannerAdSize.BANNER}
-    />
-  );
-}
 
 function NoGame() {
   return (
@@ -33,28 +17,39 @@ function NoGame() {
     </View>
   );
 }
-export default Matches = ({ navigation }) => {
+
+function seperateLinks(str) {
+  const Newstr = str.replace(/;/g, "");
+  const jsonStrings = Newstr.split("}{").map((s, index, array) => {
+    if (index === 0) {
+      return s + "}";
+    } else if (index === array.length - 1) {
+      return "{" + s;
+    } else {
+      return "{" + s + "}";
+    }
+  });
+
+  return jsonStrings;
+}
+
+const interstitial = InterstitialAd.createForAdRequest(
+  "ca-app-pub-7792480241298867/2064402770"
+);
+
+export default Matches = ({ navigation, route }) => {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   const unsubscribe = interstitial.addAdEventListener(
-  //     AdEventType.LOADED,
-  //     () => {
-  //       console.log("Interstitial Add Loaded");
-  //       interstitial.show();
-  //     }
-  //   );
-
-  //   interstitial.load();
-
-  //   return unsubscribe;
-  // }, []);
+  const { adsOn } = route.params;
 
   const renderAd = (index) => {
     if ((index + 1) % 2 === 0) {
       return (
         <View style={{ alignContent: "center", alignItems: "center" }}>
-          <BannerAdComponent />
+          <BannerAd
+            unitId={"ca-app-pub-7792480241298867/4787834692"}
+            size={BannerAdSize.BANNER}
+          />
         </View>
       );
     }
@@ -65,30 +60,20 @@ export default Matches = ({ navigation }) => {
     async function fetchSchedule() {
       const gameInfo = [];
       try {
+        interstitial.load();
         const { data } = await axios.get(
           "https://freemlb.securepayments.live/public/api/games"
         );
+
         setLoading(false);
 
         for (let i = 0; i < data.response.length; i++) {
           const homeTeam = data.response[i].team_one.name;
           const awayTeam = data.response[i].team_two.name;
-          const time = data.response[i].time
-            ? `${data.response[i].date} ${data.response[i].time}`
-            : data.response[i].date;
+          const time = data.response[i].date;
           const channels = data.response[i].additional_links.split(";");
           const is_live = data.response[i].is_live;
-          const str = data.response[i].other_headers.replace(/;/g, "");
-          const jsonStrings = str.split("}{").map((s, index, array) => {
-            if (index === 0) {
-              return s + "}";
-            } else if (index === array.length - 1) {
-              return "{" + s;
-            } else {
-              return "{" + s + "}";
-            }
-          });
-          const headers = jsonStrings;
+          const headers = seperateLinks(data.response[i].other_headers);
 
           const gameObject = {
             homeTeam,
@@ -107,6 +92,8 @@ export default Matches = ({ navigation }) => {
     }
 
     fetchSchedule();
+
+    return () => interstitial.removeAllListeners();
   }, []);
 
   if (loading) {
@@ -127,6 +114,10 @@ export default Matches = ({ navigation }) => {
                     if (!item.is_live) {
                       Alert.alert("Starting soon", "Match will start Soon😉");
                     } else {
+                      if (adsOn && interstitial.loaded) {
+                        console.log("Matches Screen");
+                        interstitial.show();
+                      }
                       navigation.navigate("Channels", {
                         channels: item.channels,
                         headers: item.headers,
@@ -136,7 +127,7 @@ export default Matches = ({ navigation }) => {
                 >
                   <MatchCard item={item} />
                 </Pressable>
-                {renderAd(index)}
+                {adsOn && renderAd(index)}
               </>
             );
           }}

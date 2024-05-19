@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#E5E4E2",
     padding: 16,
-
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
@@ -22,7 +21,8 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     elevation: 10,
     gap: 10,
-    marginHorizontal: "10%",
+    marginHorizontal: "9%",
+    width: "83%",
   },
   channelContainer: {
     flexDirection: "row",

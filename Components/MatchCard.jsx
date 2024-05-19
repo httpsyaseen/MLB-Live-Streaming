@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
   gameTime: {
     fontSize: 14,
     color: "black",
+    // fontWeight: "bold",
   },
 
   logo1: {

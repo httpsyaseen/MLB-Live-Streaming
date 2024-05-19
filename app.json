@@ -4,7 +4,7 @@
     "slug": "mlb-live-streaming",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/base4.png",
+    "icon": "./assets/baseball.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/base4.png",
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/base4.png",
+        "foregroundImage": "./assets/baseball.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.httpsyaseen.mlblivestreaming",
