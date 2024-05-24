@@ -32,6 +32,25 @@ function seperateLinks(str) {
   return jsonStrings;
 }
 
+function convertTime(pkTimeStr, viewerTimeZone) {
+  const pkTime = new Date(pkTimeStr);
+
+  function formatDateTime(date, timeZone) {
+    return date.toLocaleString("en-US", {
+      timeZone: timeZone,
+      day: "2-digit",
+      month: "short",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  }
+
+  const localFormatted = formatDateTime(pkTime, viewerTimeZone);
+
+  return localFormatted;
+}
+
 const interstitial = InterstitialAd.createForAdRequest(
   "ca-app-pub-7792480241298867/2064402770"
 );
@@ -71,16 +90,20 @@ export default Matches = ({ navigation, route }) => {
           const awayTeam = data.response[i].team_two.name;
           const time = data.response[i].date;
           const channels = data.response[i].additional_links.split(";");
-          const is_live = data.response[i].is_live;
+          // const is_live = data.response[i].is_live;
           const headers = seperateLinks(data.response[i].other_headers);
+          const viewerTimeZone =
+            Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const gameTime = convertTime(time, viewerTimeZone);
+          const Live = Date.now() >= gameTime;
 
           const gameObject = {
             homeTeam,
             awayTeam,
-            time,
+            time: gameTime,
             channels,
             headers,
-            is_live,
+            is_live: Live,
           };
           gameInfo.push(gameObject);
         }

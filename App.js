@@ -1,11 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect, useState } from "react";
-import {
-  AdEventType,
-  AppOpenAd,
-  BannerAd,
-} from "react-native-google-mobile-ads";
+import { AdEventType, AppOpenAd } from "react-native-google-mobile-ads";
 import {
   Alert,
   Linking,
@@ -14,7 +10,7 @@ import {
   Text,
   View,
   StatusBar,
-  PermissionsAndroid,
+  Share,
 } from "react-native";
 import axios from "axios";
 import messaging from "@react-native-firebase/messaging";
@@ -51,18 +47,16 @@ function CustomHeader({ ratingUrl }) {
   return (
     <View style={styles.headerContainer}>
       <View>
-        <Text style={styles.headerText}>Premium </Text>
-        <Text style={{ fontSize: 17, color: "white", fontWeight: "bold" }}>
-          Ad Free 👑
-        </Text>
+        <Text style={styles.headerText}>Premium 👑</Text>
       </View>
       <Pressable
-        onPress={() => {
-          if (ratingUrl)
-            Linking.openURL(ratingUrl).catch((err) => console.log(err));
+        onPress={async () => {
+          const result = await Share.share({
+            message: ratingUrl,
+          });
         }}
       >
-        <Text style={styles.ratenow}>Rate us 🌟</Text>
+        <Text style={styles.ratenow}>Share now🔗</Text>
       </Pressable>
     </View>
   );
@@ -200,12 +194,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#28282B",
   },
   headerText: {
-    color: "white",
+    color: "#FFD700",
     fontSize: 20,
     fontWeight: "bold",
   },
   ratenow: {
-    color: "#FFD700",
+    color: "white",
     fontSize: 18,
     fontWeight: "bold",
   },

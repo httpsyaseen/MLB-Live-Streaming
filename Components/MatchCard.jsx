@@ -125,12 +125,9 @@ const teams = [
 
 export default function MatchCard({ item }) {
   const { awayTeam: team1, homeTeam: team2, time } = item;
-
-  const isLive = item.is_live;
-
   const homeTeam = teams.find((p) => p.name === team1);
   const awayTeam = teams.find((p) => p.name === team2);
-
+  const isLive = item.is_live;
   return (
     <View style={styles.container}>
       <View style={styles.teamContainer}>
@@ -191,7 +188,6 @@ const styles = StyleSheet.create({
   gameTime: {
     fontSize: 14,
     color: "black",
-    // fontWeight: "bold",
   },
 
   logo1: {
