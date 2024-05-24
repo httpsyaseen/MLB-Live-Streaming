@@ -8,12 +8,12 @@ import {
   Linking,
 } from "react-native";
 
-const NewApp = ({ link, visible }) => {
+const NewApp = ({ link, visible, message }) => {
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>We have shifed to new App 😃</Text>
+          <Text style={styles.modalText}>{message}</Text>
           <TouchableOpacity
             style={styles.button}
             onPress={() => {
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent background
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalView: {
     backgroundColor: "white",

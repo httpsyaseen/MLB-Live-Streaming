@@ -89,13 +89,11 @@ export default function App() {
         setOptions(data);
         if (data.appOpenAd) {
           loadAd(data.showRatingAlert, data.ratingUrl);
-          // if (data.showRatingAlert) showRateAlert(data.ratingUrl);
         } else {
           setLoading(false);
           if (data.showRatingAlert) showRateAlert(data.ratingUrl);
         }
       } catch (err) {
-        console.error("Error fetching options:", err);
         setLoading(false);
       }
     };
@@ -119,10 +117,12 @@ export default function App() {
   }, []);
   useEffect(() => {
     const initializeMessaging = async () => {
-      await messaging().requestPermission();
-      PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
-      );
+      const { status: existingStatus } =
+        await Notifications.getPermissionsAsync();
+
+      if (existingStatus !== "granted") {
+        await Notifications.requestPermissionsAsync();
+      }
 
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {});
 
@@ -147,7 +147,11 @@ export default function App() {
   return (
     <>
       <StatusBar backgroundColor={"#28282B"} />
-      <NewApp link={options.redirectLink} visible={options.redirect || false} />
+      <NewApp
+        link={options.redirectLink}
+        visible={options.redirect || false}
+        message={options.redirectMessage}
+      />
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -176,7 +180,7 @@ export default function App() {
             component={VideoPlayer}
             options={{ headerShown: false, orientation: "landscape" }}
             initialParams={{
-              videoScreenAd: options.videoScreenAd,
+              videoScreenAd: options.videoPlayeAd,
               videoAdTime: options.VideoAdTime,
             }}
           />

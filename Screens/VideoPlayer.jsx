@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Alert } from "react-native";
 import { Video } from "expo-av";
 import Loading from "../Components/Loading";
 import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
@@ -11,7 +11,6 @@ const interstitial = InterstitialAd.createForAdRequest(
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
   const { channel, headers } = route.params;
   const { videoScreenAd, videoAdTime } = route.params;
-  console.log(videoAdTime);
 
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -31,7 +30,6 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
     };
 
     const interval = setInterval(() => {
-      console.log("VideoAd");
       if (videoScreenAd) {
         loadAd();
       }
@@ -77,10 +75,9 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
           console.log(err);
           Alert.alert(
             "Error Occured",
-            "Channel is currently not working, try another channel "
+            "Check your intenet conneciton or try another channel "
           );
         }}
-        isLooping={true}
         onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
         onFullscreenUpdate={(event) => {
           if (

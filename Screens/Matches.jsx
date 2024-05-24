@@ -1,4 +1,4 @@
-import { View, FlatList, Pressable, Text, Alert, Linking } from "react-native";
+import { View, FlatList, Pressable, Text, Alert } from "react-native";
 import { useEffect, useState } from "react";
 import MatchCard from "../Components/MatchCard";
 import axios from "axios";
