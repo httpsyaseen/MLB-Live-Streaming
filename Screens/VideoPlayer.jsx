@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, Alert, Pressable } from "react-native";
+import { StyleSheet, View, Alert, ActivityIndicator } from "react-native";
 import { Video } from "expo-av";
 import Loading from "../Components/Loading";
 import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
@@ -10,7 +10,8 @@ const interstitial = InterstitialAd.createForAdRequest(
 
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
   const { channel, headers } = route.params;
-  const { adsOn } = route.params;
+  const { videoScreenAd, videoAdTime } = route.params;
+  console.log(videoAdTime);
 
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,10 +31,11 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
     };
 
     const interval = setInterval(() => {
-      if (adsOn) {
+      console.log("VideoAd");
+      if (videoScreenAd) {
         loadAd();
       }
-    }, 1000 * 60 * 5);
+    }, 1000 * 60 * videoAdTime);
 
     return () => {
       clearInterval(interval);
@@ -68,25 +70,17 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
           uri: channel,
           headers: headers,
         }}
-        // source={{
-        //   uri: "https://sportsleading.online/live/stream_f1.m3u8",
-        //   headers: {
-        //     "User-Agent":
-        //       "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
-        //     Origin: "https://streambtw.com",
-        //     referer: "https://streambtw.com/",
-        //   },
-        // }}
         onLoadStart={() => <Loading />}
         resizeMode="cover"
         useNativeControls={true}
         onError={(err) => {
+          console.log(err);
           Alert.alert(
             "Error Occured",
-            "Channel is currently not working, try another channel 😅"
+            "Channel is currently not working, try another channel "
           );
         }}
-        isLooping
+        isLooping={true}
         onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
         onFullscreenUpdate={(event) => {
           if (

@@ -15,7 +15,7 @@ const interstitial = InterstitialAd.createForAdRequest(
 export default Channels = ({ navigation, route }) => {
   const [streams, setStreams] = useState([]);
   const { channels, headers } = route.params;
-  const { adsOn } = route.params;
+  const { bannerAd, channelScreenAd } = route.params;
 
   useEffect(() => {
     interstitial.load();
@@ -50,8 +50,7 @@ export default Channels = ({ navigation, route }) => {
               <>
                 <Pressable
                   onPress={() => {
-                    if (adsOn && interstitial.loaded) {
-                      console.log("Channel Screen");
+                    if (channelScreenAd && interstitial.loaded) {
                       interstitial.show();
                     }
                     navigation.navigate("VideoPlayer", {
@@ -74,7 +73,7 @@ export default Channels = ({ navigation, route }) => {
             marginBottom: "10%",
           }}
         >
-          {adsOn && (
+          {bannerAd && (
             <BannerAd
               unitId={"ca-app-pub-7792480241298867/4787834692"}
               size={BannerAdSize.BANNER}

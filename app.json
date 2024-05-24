@@ -30,14 +30,14 @@
         "expo-notifications",
         {
           "icon": "./assets/tv.png",
-          "color": "#ffffff",
-          "sounds": ["./assets/baseball.mp3"]
+          "color": "#ffffff"
         }
       ]
     ],
-    "extra": { "eas": { "projectId": "36075786-4f99-4bfd-bdad-b54066bb64e8" } }
+    "extra": {
+      "eas": { "projectId": "36075786-4f99-4bfd-bdad-b54066bb64e8" }
+    }
   },
-
   "react-native-google-mobile-ads": {
     "android_app_id": "ca-app-pub-7792480241298867~2193460945"
   }

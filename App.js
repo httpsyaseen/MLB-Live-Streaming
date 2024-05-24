@@ -1,22 +1,29 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useEffect } from "react";
-import { Alert, Linking, Pressable, StyleSheet, Text } from "react-native";
-import Matches from "./Screens/Matches";
-import Channels from "./Screens/Channels";
-import VideoPlayer from "./Screens/VideoPlayer";
-import { View, StatusBar } from "react-native";
-import NewApp from "./Components/NewApp";
+import { useEffect, useState } from "react";
 import {
   AdEventType,
   AppOpenAd,
-  TestIds,
+  BannerAd,
 } from "react-native-google-mobile-ads";
-import Splash from "./Components/Splash";
-import * as Notifications from "expo-notifications";
-import messaging from "@react-native-firebase/messaging";
-import { useState } from "react";
+import {
+  Alert,
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  PermissionsAndroid,
+} from "react-native";
 import axios from "axios";
+import messaging from "@react-native-firebase/messaging";
+import * as Notifications from "expo-notifications";
+import Matches from "./Screens/Matches";
+import Channels from "./Screens/Channels";
+import VideoPlayer from "./Screens/VideoPlayer";
+import NewApp from "./Components/NewApp";
+import Splash from "./Components/Splash";
 
 const Stack = createNativeStackNavigator();
 
@@ -80,12 +87,12 @@ export default function App() {
           "https://mlb-server-beta.vercel.app/api/options"
         );
         setOptions(data);
-        setLoading(false);
-        if (true) {
-          showRateAlert(options.ratingUrl);
-        }
-        if (data.adsOn) {
-          loadAd();
+        if (data.appOpenAd) {
+          loadAd(data.showRatingAlert, data.ratingUrl);
+          // if (data.showRatingAlert) showRateAlert(data.ratingUrl);
+        } else {
+          setLoading(false);
+          if (data.showRatingAlert) showRateAlert(data.ratingUrl);
         }
       } catch (err) {
         console.error("Error fetching options:", err);
@@ -93,7 +100,7 @@ export default function App() {
       }
     };
 
-    const loadAd = () => {
+    const loadAd = (alertMessage, link) => {
       const appOpenAd = AppOpenAd.createForAdRequest(
         "ca-app-pub-7792480241298867/9034556683"
       );
@@ -101,6 +108,7 @@ export default function App() {
       appOpenAd.addAdEventListener("loaded", () => {
         setLoading(false);
         appOpenAd.show();
+        if (alertMessage) showRateAlert(link);
       });
       appOpenAd.addAdEventListener(AdEventType.ERROR, () => {
         setLoading(false);
@@ -112,6 +120,9 @@ export default function App() {
   useEffect(() => {
     const initializeMessaging = async () => {
       await messaging().requestPermission();
+      PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS
+      );
 
       messaging().setBackgroundMessageHandler(async (remoteMessage) => {});
 
@@ -136,7 +147,7 @@ export default function App() {
   return (
     <>
       <StatusBar backgroundColor={"#28282B"} />
-      <NewApp link={options.redirectLink} visible={options.redirect} />
+      <NewApp link={options.redirectLink} visible={options.redirect || false} />
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -146,19 +157,28 @@ export default function App() {
           <Stack.Screen
             name="Matches"
             component={Matches}
-            initialParams={{ adsOn: options.adsOn }}
+            initialParams={{
+              bannerAd: options.bannerAd,
+              matchScreenAd: options.matchScreenAd,
+            }}
           />
 
           <Stack.Screen
             name="Channels"
             component={Channels}
-            initialParams={{ adsOn: options.adsOn }}
+            initialParams={{
+              bannerAd: options.bannerAd,
+              channelScreenAd: options.channelScreenAd,
+            }}
           />
           <Stack.Screen
             name="VideoPlayer"
             component={VideoPlayer}
             options={{ headerShown: false, orientation: "landscape" }}
-            initialParams={{ adsOn: options.adsOn }}
+            initialParams={{
+              videoScreenAd: options.videoScreenAd,
+              videoAdTime: options.VideoAdTime,
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

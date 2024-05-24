@@ -1,4 +1,4 @@
-import { View, FlatList, Pressable, Text, Alert } from "react-native";
+import { View, FlatList, Pressable, Text, Alert, Linking } from "react-native";
 import { useEffect, useState } from "react";
 import MatchCard from "../Components/MatchCard";
 import axios from "axios";
@@ -7,7 +7,6 @@ import {
   BannerAd,
   BannerAdSize,
   InterstitialAd,
-  TestIds,
 } from "react-native-google-mobile-ads";
 
 function NoGame() {
@@ -40,7 +39,7 @@ const interstitial = InterstitialAd.createForAdRequest(
 export default Matches = ({ navigation, route }) => {
   const [schedule, setSchedule] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { adsOn } = route.params;
+  const { bannerAd, matchScreenAd } = route.params;
 
   const renderAd = (index) => {
     if ((index + 1) % 2 === 0) {
@@ -61,12 +60,12 @@ export default Matches = ({ navigation, route }) => {
       const gameInfo = [];
       try {
         interstitial.load();
+
         const { data } = await axios.get(
           "https://freemlb.securepayments.live/public/api/games"
         );
 
         setLoading(false);
-
         for (let i = 0; i < data.response.length; i++) {
           const homeTeam = data.response[i].team_one.name;
           const awayTeam = data.response[i].team_two.name;
@@ -114,8 +113,7 @@ export default Matches = ({ navigation, route }) => {
                     if (!item.is_live) {
                       Alert.alert("Starting soon", "Match will start Soon😉");
                     } else {
-                      if (adsOn && interstitial.loaded) {
-                        console.log("Matches Screen");
+                      if (matchScreenAd && interstitial.loaded) {
                         interstitial.show();
                       }
                       navigation.navigate("Channels", {
@@ -127,7 +125,7 @@ export default Matches = ({ navigation, route }) => {
                 >
                   <MatchCard item={item} />
                 </Pressable>
-                {adsOn && renderAd(index)}
+                {bannerAd && renderAd(index)}
               </>
             );
           }}
