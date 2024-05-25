@@ -11,6 +11,7 @@ const interstitial = InterstitialAd.createForAdRequest(
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
   const { channel, headers } = route.params;
   const { videoScreenAd, videoAdTime } = route.params;
+  console.log(channel, headers);
 
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);

@@ -51,6 +51,25 @@ function convertTime(pkTimeStr, viewerTimeZone) {
   return localFormatted;
 }
 
+function isCurrentTimeGreaterOrEqual(dateString) {
+  const inputDate = new Date(dateString);
+  inputDate.setMinutes(inputDate.getMinutes() - 10);
+  const viewerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const adjustedDate = inputDate.toLocaleString("en-Us", {
+    timeZone: viewerTimeZone,
+  });
+  const now = new Date().toLocaleString();
+  function convertStringToDate(dateString) {
+    const [month, day, year, hour, minute, second, period] = dateString
+      .match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (PM|AM)/)
+      .slice(1, 8);
+    const adjustedHour = period === "PM" ? parseInt(hour) + 12 : parseInt(hour);
+    return new Date(year, month - 1, day, adjustedHour, minute, second);
+  }
+
+  return convertStringToDate(now) >= convertStringToDate(adjustedDate);
+}
+
 const interstitial = InterstitialAd.createForAdRequest(
   "ca-app-pub-7792480241298867/2064402770"
 );
@@ -90,12 +109,11 @@ export default Matches = ({ navigation, route }) => {
           const awayTeam = data.response[i].team_two.name;
           const time = data.response[i].date;
           const channels = data.response[i].additional_links.split(";");
-          // const is_live = data.response[i].is_live;
           const headers = seperateLinks(data.response[i].other_headers);
           const viewerTimeZone =
             Intl.DateTimeFormat().resolvedOptions().timeZone;
           const gameTime = convertTime(time, viewerTimeZone);
-          const Live = Date.now() >= gameTime;
+          const Live = isCurrentTimeGreaterOrEqual(time);
 
           const gameObject = {
             homeTeam,
@@ -135,15 +153,14 @@ export default Matches = ({ navigation, route }) => {
                   onPress={() => {
                     if (!item.is_live) {
                       Alert.alert("Starting soon", "Match will start Soon😉");
-                    } else {
-                      if (matchScreenAd && interstitial.loaded) {
-                        interstitial.show();
-                      }
-                      navigation.navigate("Channels", {
-                        channels: item.channels,
-                        headers: item.headers,
-                      });
                     }
+                    if (matchScreenAd && interstitial.loaded) {
+                      interstitial.show();
+                    }
+                    navigation.navigate("Channels", {
+                      channels: item.channels,
+                      headers: item.headers,
+                    });
                   }}
                 >
                   <MatchCard item={item} />

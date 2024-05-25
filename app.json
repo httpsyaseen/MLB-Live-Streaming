@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.httpsyaseen.mlblivestreaming"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,7 +36,9 @@
       ]
     ],
     "extra": {
-      "eas": { "projectId": "36075786-4f99-4bfd-bdad-b54066bb64e8" }
+      "eas": {
+        "projectId": "36075786-4f99-4bfd-bdad-b54066bb64e8"
+      }
     }
   },
   "react-native-google-mobile-ads": {
