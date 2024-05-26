@@ -9,6 +9,10 @@ import {
   InterstitialAd,
 } from "react-native-google-mobile-ads";
 
+const interstitial = InterstitialAd.createForAdRequest(
+  "ca-app-pub-7792480241298867/2064402770"
+);
+
 function NoGame() {
   return (
     <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
@@ -37,7 +41,7 @@ function convertTime(pkTimeStr, viewerTimeZone) {
 
   function formatDateTime(date, timeZone) {
     return date.toLocaleString("en-US", {
-      timeZone: timeZone,
+      timeZone: viewerTimeZone,
       day: "2-digit",
       month: "short",
       hour: "2-digit",
@@ -50,29 +54,6 @@ function convertTime(pkTimeStr, viewerTimeZone) {
 
   return localFormatted;
 }
-
-function isCurrentTimeGreaterOrEqual(dateString) {
-  const inputDate = new Date(dateString);
-  inputDate.setMinutes(inputDate.getMinutes() - 10);
-  const viewerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  const adjustedDate = inputDate.toLocaleString("en-Us", {
-    timeZone: viewerTimeZone,
-  });
-  const now = new Date().toLocaleString();
-  function convertStringToDate(dateString) {
-    const [month, day, year, hour, minute, second, period] = dateString
-      .match(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+) (PM|AM)/)
-      .slice(1, 8);
-    const adjustedHour = period === "PM" ? parseInt(hour) + 12 : parseInt(hour);
-    return new Date(year, month - 1, day, adjustedHour, minute, second);
-  }
-
-  return convertStringToDate(now) >= convertStringToDate(adjustedDate);
-}
-
-const interstitial = InterstitialAd.createForAdRequest(
-  "ca-app-pub-7792480241298867/2064402770"
-);
 
 export default Matches = ({ navigation, route }) => {
   const [schedule, setSchedule] = useState([]);
@@ -108,12 +89,12 @@ export default Matches = ({ navigation, route }) => {
           const homeTeam = data.response[i].team_one.name;
           const awayTeam = data.response[i].team_two.name;
           const time = data.response[i].date;
+          const is_live = data.response[i].is_live;
           const channels = data.response[i].additional_links.split(";");
           const headers = seperateLinks(data.response[i].other_headers);
           const viewerTimeZone =
             Intl.DateTimeFormat().resolvedOptions().timeZone;
           const gameTime = convertTime(time, viewerTimeZone);
-          const Live = isCurrentTimeGreaterOrEqual(time);
 
           const gameObject = {
             homeTeam,
@@ -121,7 +102,7 @@ export default Matches = ({ navigation, route }) => {
             time: gameTime,
             channels,
             headers,
-            is_live: Live,
+            is_live,
           };
           gameInfo.push(gameObject);
         }

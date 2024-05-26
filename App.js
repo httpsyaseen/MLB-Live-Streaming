@@ -43,11 +43,11 @@ const showRateAlert = (link) => {
   );
 };
 
-function CustomHeader({ ratingUrl }) {
+function CustomHeader({ ratingUrl, version }) {
   return (
     <View style={styles.headerContainer}>
       <View>
-        <Text style={styles.headerText}>Premium 👑</Text>
+        <Text style={styles.headerText}> {version}</Text>
       </View>
       <Pressable
         onPress={async () => {
@@ -149,7 +149,12 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
-            header: () => <CustomHeader ratingUrl={options.ratingUrl} />,
+            header: () => (
+              <CustomHeader
+                ratingUrl={options.ratingUrl}
+                version={options.version}
+              />
+            ),
           }}
         >
           <Stack.Screen

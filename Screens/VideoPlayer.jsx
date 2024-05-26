@@ -11,21 +11,21 @@ const interstitial = InterstitialAd.createForAdRequest(
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
   const { channel, headers } = route.params;
   const { videoScreenAd, videoAdTime } = route.params;
-  console.log(channel, headers);
 
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isFullScreen, setIsFullScreen] = useState(true);
 
   useEffect(() => {
+    videoRef.current.presentFullscreenPlayer();
     const loadAd = async () => {
       try {
         interstitial.load();
         interstitial.addAdEventListener(AdEventType.LOADED, () => {
           interstitial.show();
+          videoRef.current.presentFullscreenPlayer();
         });
         interstitial.addAdEventListener(AdEventType.CLOSED, () => {
-          setIsFullScreen(true);
+          videoRef.current.presentFullscreenPlayer();
         });
       } catch (error) {}
     };
@@ -41,12 +41,6 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
       interstitial.removeAllListeners();
     };
   }, []);
-
-  useEffect(() => {
-    if (isFullScreen && videoRef.current) {
-      videoRef.current.presentFullscreenPlayer();
-    }
-  }, [isFullScreen]);
 
   const handlePlaybackStatusUpdate = (status) => {
     if (status.isLoading) {
@@ -80,19 +74,6 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
           );
         }}
         onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-        onFullscreenUpdate={(event) => {
-          if (
-            event.fullscreenUpdate ===
-            Video.FULLSCREEN_UPDATE_PLAYER_WILL_PRESENT
-          ) {
-            setIsFullScreen(true);
-          } else if (
-            event.fullscreenUpdate ===
-            Video.FULLSCREEN_UPDATE_PLAYER_WILL_DISMISS
-          ) {
-            setIsFullScreen(false);
-          }
-        }}
       />
       {isLoading && <Loading />}
     </View>

@@ -14,11 +14,6 @@
       }
     },
 
-    "preview1": {
-      "android": {
-        "gradleCommand": ":app:assembleRelease"
-      }
-    },
     "production": {}
   },
   "submit": {
