@@ -9,7 +9,7 @@ import {
 } from "react-native-google-mobile-ads";
 
 const interstitial = InterstitialAd.createForAdRequest(
-  "ca-app-pub-7792480241298867/2064402770"
+  "ca-app-pub-8966222560404211/6597510317"
 );
 
 export default Channels = ({ navigation, route }) => {
@@ -75,7 +75,7 @@ export default Channels = ({ navigation, route }) => {
         >
           {bannerAd && (
             <BannerAd
-              unitId={"ca-app-pub-7792480241298867/4787834692"}
+              unitId={"ca-app-pub-8966222560404211/3197768463"}
               size={BannerAdSize.BANNER}
             />
           )}

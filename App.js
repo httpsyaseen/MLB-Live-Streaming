@@ -94,7 +94,7 @@ export default function App() {
 
     const loadAd = (alertMessage, link) => {
       const appOpenAd = AppOpenAd.createForAdRequest(
-        "ca-app-pub-7792480241298867/9034556683"
+        "ca-app-pub-8966222560404211/9091811716"
       );
       appOpenAd.load();
       appOpenAd.addAdEventListener("loaded", () => {

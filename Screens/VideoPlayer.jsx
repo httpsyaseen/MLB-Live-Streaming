@@ -5,7 +5,7 @@ import Loading from "../Components/Loading";
 import { InterstitialAd, AdEventType } from "react-native-google-mobile-ads";
 
 const interstitial = InterstitialAd.createForAdRequest(
-  "ca-app-pub-7792480241298867/2064402770"
+  "ca-app-pub-8966222560404211/6597510317"
 );
 
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
