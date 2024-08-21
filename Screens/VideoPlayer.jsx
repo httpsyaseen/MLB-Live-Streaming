@@ -11,6 +11,7 @@ const interstitial = InterstitialAd.createForAdRequest(
 const FullScreenLandscapeVideoPlayer = ({ route }) => {
   const { channel, headers } = route.params;
   const { videoScreenAd, videoAdTime } = route.params;
+  const [hasError, setHasError] = useState(false);
 
   const videoRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -52,29 +53,50 @@ const FullScreenLandscapeVideoPlayer = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <Video
-        ref={videoRef}
-        style={{
-          width: "100%",
-          height: "100%",
-          flex: 1,
-        }}
-        source={{
-          uri: channel,
-          headers: headers,
-        }}
-        onLoadStart={() => <Loading />}
-        resizeMode="cover"
-        useNativeControls={true}
-        onError={(err) => {
-          console.log(err);
-          Alert.alert(
-            "Error Occured",
-            "Check your intenet conneciton or try another channel "
-          );
-        }}
-        onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-      />
+      {hasError ? (
+        <Video
+          ref={videoRef}
+          style={{
+            width: "100%",
+            height: "100%",
+            flex: 1,
+          }}
+          source={require("../assets/video/mlb.mp4")}
+          resizeMode="cover"
+          useNativeControls={true}
+          isLooping={true}
+          shouldPlay={true}
+        />
+      ) : (
+        <Video
+          ref={videoRef}
+          style={{
+            width: "100%",
+            height: "100%",
+            flex: 1,
+          }}
+          source={{
+            uri: channel,
+            headers: headers,
+          }}
+          onLoadStart={() => <Loading />}
+          resizeMode="cover"
+          useNativeControls={true}
+          shouldPlay={true}
+          onError={(err) => {
+            setHasError(true);
+            videoRef.current.stopAsync();
+            videoRef.current.unloadAsync();
+            videoRef.current.loadAsync(
+              require("../assets/video/mlb.mp4"),
+              { shouldPlay: true, isLooping: true },
+              false
+            );
+          }}
+          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
+        />
+      )}
+
       {isLoading && <Loading />}
     </View>
   );

@@ -88,6 +88,21 @@ export default function App() {
           if (data.showRatingAlert) showRateAlert(data.ratingUrl);
         }
       } catch (err) {
+        setOptions({
+          bannerAd: true,
+          appOpenAd: false,
+          matchScreenAd: true,
+          channelScreenAd: false,
+          videoPlayeAd: true,
+          redirect: false,
+          redirectLink: "https://youtu.be/yVuctV4uo3E",
+          ratingUrl:
+            "https://play.google.com/store/apps/details?id=com.httpsyaseen.mlblivestreaming",
+          showRatingAlert: false,
+          VideoAdTime: 5,
+          redirectMessage: "We have shifed to new App 😃",
+          version: "Premium 👑",
+        });
         setLoading(false);
       }
     };
