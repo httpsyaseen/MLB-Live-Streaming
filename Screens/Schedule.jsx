@@ -26,7 +26,7 @@ const GameScreen = () => {
   }, []);
 
   return (
-    <View style={{ backgroundColor: "#28282B", flex: 1 }}>
+    <View style={{ backgroundColor: "#000", flex: 1 }}>
       {loading && <Loading />}
       <FlatList
         data={schedule}
@@ -40,6 +40,10 @@ const GameScreen = () => {
                 awayTeam={item?.teams?.away?.team}
                 venue={item?.venue?.name}
                 status={item?.status?.abstractGameState}
+                homeTeamScore={String(item?.teams?.home?.score)}
+                awayTeamScore={String(item?.teams?.away?.score)}
+                awayTeamIsWinner={item?.teams?.away?.isWinner}
+                homeTeamIsWinner={item?.teams?.away?.isWinner}
               />
             </>
           );

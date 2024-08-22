@@ -8,13 +8,9 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
-  "resolutions": {
-    "expo-linear-gradient": "10.0.3"
-  },
   "dependencies": {
     "@react-native-firebase/app": "^19.2.2",
     "@react-native-firebase/messaging": "^19.2.2",
-    "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
     "axios": "^1.6.8",

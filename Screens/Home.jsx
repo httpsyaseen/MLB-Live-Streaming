@@ -28,7 +28,6 @@ const BeautifulCards = ({ navigation }) => {
         subtitle="Stay updated with the latest baseball action and Daily Schedules"
         backgroundImage={require("../assets/player.jpeg")}
         onPress={() => {
-          console.log("MLB Schedules and Scores Clicked");
           navigation.navigate("Schedule");
         }}
       />
@@ -37,7 +36,6 @@ const BeautifulCards = ({ navigation }) => {
         subtitle="Enjoy real-time access to your favorite events and shows in HD"
         backgroundImage={require("../assets/livestream.jpg")}
         onPress={() => {
-          console.log("Live Streams Clicked");
           navigation.navigate("Matches");
         }}
       />
@@ -46,7 +44,6 @@ const BeautifulCards = ({ navigation }) => {
         subtitle="Subscribe to our packages and enjoy free HD streams 24/7 with No Ads"
         backgroundImage={require("../assets/subscription.jpg")}
         onPress={() => {
-          console.log("Subscriptions Clicked");
           navigation.navigate("Schedule");
         }}
       />
@@ -62,6 +59,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 5,
     backgroundColor: "#28282b",
+    // backgroundColor: "#000",
   },
   cardContainer: {
     width: "100%",

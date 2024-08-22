@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, ImageBackground } from "react-native";
 
 const teams = [
   {
@@ -124,7 +124,17 @@ const teams = [
   },
 ];
 
-const GameCard = ({ gameDate, homeTeam, awayTeam, venue, status }) => {
+const GameCard = ({
+  gameDate,
+  homeTeam,
+  awayTeam,
+  venue,
+  status,
+  homeTeamScore,
+  awayTeamScore,
+  homeTeamIsWinner,
+  awayTeamIsWinner,
+}) => {
   const homeTeamImage = teams.find((p) => p.name === homeTeam.name);
   const awayTeamImage = teams.find((p) => p.name === awayTeam.name);
 
@@ -138,11 +148,13 @@ const GameCard = ({ gameDate, homeTeam, awayTeam, venue, status }) => {
   }).format(date);
   return (
     <View style={styles.cardContainer}>
+      {/* <ImageBackground source={require("../assets/player.jpeg")}> */}
       <View style={styles.headerContainer}>
         <View style={styles.teamContainer}>
           <Image source={homeTeamImage.image} style={styles.teamLogo} />
-          <Text style={styles.teamName}>{awayTeam.name}</Text>
+          <Text style={styles.teamName}>{homeTeam.name}</Text>
         </View>
+
         <Image
           source={require("../assets/vs.png")}
           style={{ width: 50, height: 50 }}
@@ -164,34 +176,38 @@ const GameCard = ({ gameDate, homeTeam, awayTeam, venue, status }) => {
         <View style={styles.infoItem}>
           <Text style={styles.infoLabel}>Status:</Text>
           <Text style={styles.infoText}>
-            {status.detailedState === "Final"
+            {status === "Final"
               ? "Match Ended"
+              : status === "Live"
+              ? "Live"
               : "Match not Started Yet"}
           </Text>
         </View>
-        {(awayTeam.score || homeTeam.score) && (
+        {homeTeamScore !== "undefined" && (
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Scores</Text>
             <Text style={styles.infoText}>
-              {awayTeam.score || 0}:{homeTeam.score || 0}
+              {`${homeTeamScore || 0}:${awayTeamScore || 0}`}
             </Text>
           </View>
         )}
-        {(awayTeam.isWinner || homeTeam.isWinner) && (
+        {(awayTeamIsWinner || homeTeamIsWinner) && (
           <View style={styles.infoItem}>
             <Text style={styles.infoLabel}>Winner</Text>
             <Text style={styles.infoText}>
-              {awayTeam.isWinner ? `${awayTeam.name}` : `${homeTeam.name}`}
+              {awayTeamIsWinner ? `${awayTeam.name}` : `${homeTeam.name}`}
             </Text>
           </View>
         )}
       </View>
+      {/* </ImageBackground> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   cardContainer: {
+    // backgroundColor: "#242145",
     backgroundColor: "#E5E4E2",
     borderRadius: 8,
     shadowColor: "#000",
@@ -199,6 +215,7 @@ const styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
+
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
@@ -209,10 +226,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    // borderBottomWidth: 1,
-    // borderBottomColor: "#28282b",
+    paddingVertical: 3,
+    paddingHorizontal: 12,
   },
   teamContainer: {
     alignItems: "center",
@@ -225,7 +240,7 @@ const styles = StyleSheet.create({
   },
   teamName: {
     fontSize: 16,
-
+    // color: "#e7005e",
     fontWeight: "bold",
     marginTop: 8,
   },
