@@ -18,8 +18,10 @@ import * as Notifications from "expo-notifications";
 import Matches from "./Screens/Matches";
 import Channels from "./Screens/Channels";
 import VideoPlayer from "./Screens/VideoPlayer";
+import Schedule from "./Screens/Schedule";
 import NewApp from "./Components/NewApp";
 import Splash from "./Components/Splash";
+import BeautifulCards from "./Screens/Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -78,7 +80,7 @@ export default function App() {
     const fetchOptions = async () => {
       try {
         const { data } = await axios.get(
-          "https://mlb-server-beta.vercel.app/api/options"
+          "https://mlb-server-beta.vercel.app/api/optionsaaa"
         );
         setOptions(data);
         if (data.appOpenAd) {
@@ -99,7 +101,7 @@ export default function App() {
           ratingUrl:
             "https://play.google.com/store/apps/details?id=com.httpsyaseen.mlblivestreaming",
           showRatingAlert: false,
-          VideoAdTime: 5,
+          VideoAdTime: 10,
           redirectMessage: "We have shifed to new App 😃",
           version: "Premium 👑",
         });
@@ -155,12 +157,13 @@ export default function App() {
 
   return (
     <>
-      <StatusBar backgroundColor={"#28282B"} />
+      <StatusBar backgroundColor={"#28282b"} />
       <NewApp
         link={options.redirectLink}
         visible={options.redirect || false}
         message={options.redirectMessage}
       />
+
       <NavigationContainer>
         <Stack.Navigator
           screenOptions={{
@@ -172,6 +175,8 @@ export default function App() {
             ),
           }}
         >
+          <Stack.Screen name="Home" component={BeautifulCards} />
+          <Stack.Screen name="Schedule" component={Schedule} />
           <Stack.Screen
             name="Matches"
             component={Matches}
